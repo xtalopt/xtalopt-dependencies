@@ -7,7 +7,7 @@
 set(_source "${CMAKE_CURRENT_SOURCE_DIR}/rdkit")
 set(_build "${CMAKE_CURRENT_BINARY_DIR}/rdkit")
 
-set(_deps "boost")
+set(_deps "boost" "eigen3")
 
 set(_cmake_cache_args
     -DRDK_BUILD_PYTHON_WRAPPERS:BOOL=OFF
