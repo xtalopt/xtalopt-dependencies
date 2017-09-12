@@ -38,12 +38,12 @@ endif(UNIX)
 
 # If we have apple, we should export a few C and CXX flags first
 if(APPLE)
-  set(build_cmd
+  set(config_cmd
       export CFLAGS=-mmacosx-version-min=10.9
       &&
       export CPPFLAGS=-mmacosx-version-min=10.9
       &&
-      ${build_cmd}
+      ${config_cmd}
   )
 endif(APPLE)
 
