@@ -27,6 +27,12 @@ if(WIN32)
   )
 endif(WIN32)
 
+if(APPLE)
+  set(_cmake_cache_args
+      "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.9"
+  )
+endif(APPLE)
+
 ExternalProject_Add(openbabel
   SOURCE_DIR ${_source}
   BINARY_DIR ${_build}
