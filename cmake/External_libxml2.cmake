@@ -19,9 +19,9 @@ if(UNIX)
 else(UNIX)
   set(config_cmd "cscript")
   set(config_args
-      ".\win32\configure.js"
+      "./win32/configure.js"
       "compiler=msvc"
-      "prefix=${CMAKE_BINARY_DIR}\libxml2-install"
+      "prefix=${CMAKE_BINARY_DIR}/libxml2-install"
       "iconv=no"
       "zlib=no"
       "static=yes"

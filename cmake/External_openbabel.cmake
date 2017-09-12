@@ -17,8 +17,15 @@ set(_cmake_cache_args
     "-DLIBXML2_LIBRARIES:FILEPATH=${LIBXML2_LIBRARIES}"
     "-DCMAKE_BUILD_TYPE:STRING=Release"
     "-DEIGEN3_INCLUDE_DIR:FILEPATH=${EIGEN3_INCLUDE_DIRS}"
-    "-DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/openbabel-install"
+    "-DCMAKE_INSTALL_PREFIX:FILEPATH=${CMAKE_BINARY_DIR}/openbabel-install"
 )
+
+if(WIN32)
+  set(_cmake_cache_args
+      ${_cmake_cache_args}
+      "-G \"NMake Makefiles\""
+  )
+endif(WIN32)
 
 ExternalProject_Add(openbabel
   SOURCE_DIR ${_source}
