@@ -17,9 +17,9 @@ if(UNIX)
   set(build_cmd "make" "-j2")
   set(install_cmd "make" "install")
 else(UNIX)
+  # IF we have Windows, we must change the '/' to '\' or an error occurs
   set(install_dir "${CMAKE_BINARY_DIR}/libxml2-install")
   STRING(REGEX REPLACE "/" "\\\\" install_dir ${install_dir})
-  message("install_dir is ${install_dir}")
   set(config_cmd "cd" "win32" "&&" "cscript")
   set(config_args
       "configure.js"
@@ -38,12 +38,26 @@ endif(UNIX)
 
 # If we have apple, we should export a few C and CXX flags first
 if(APPLE)
-  set(config_cmd
+  set(env_vars_cmd
       export CFLAGS=-mmacosx-version-min=10.9
       &&
       export CPPFLAGS=-mmacosx-version-min=10.9
+  )
+
+  set(config_cmd
+      ${env_vars_cmd}
       &&
       ${config_cmd}
+  )
+  set(build_cmd
+      ${env_vars_cmd}
+      &&
+      ${build_cmd}
+  )
+  set(install_cmd
+      ${env_vars_cmd}
+      &&
+      ${install_cmd}
   )
 endif(APPLE)
 
