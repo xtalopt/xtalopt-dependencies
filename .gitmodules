@@ -1,3 +1,6 @@
 [submodule "openbabel"]
 	path = openbabel
 	url = https://github.com/openbabel/openbabel
+[submodule "rdkit"]
+	path = rdkit
+	url = https://github.com/rdkit/rdkit
