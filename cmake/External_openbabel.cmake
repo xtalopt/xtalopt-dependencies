@@ -29,7 +29,7 @@ endif(WIN32)
 
 if(APPLE)
   set(_cmake_cache_args
-      "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.9"
+      "-DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.9"
   )
 endif(APPLE)
 

@@ -75,4 +75,9 @@ ExternalProject_Add(libxml2
 # Set the include dirs, library dirs, and libraries in the parent scope
 set(LIBXML2_ROOT "${CMAKE_BINARY_DIR}/libxml2-install")
 set(LIBXML2_INCLUDE_DIRS "${LIBXML2_ROOT}/include")
-set(LIBXML2_LIBRARIES "${LIBXML2_ROOT}/lib/libxml2.a")
+
+if(UNIX)
+  set(LIBXML2_LIBRARIES "${LIBXML2_ROOT}/lib/libxml2.a")
+else(UNIX)
+  set(LIBXML2_LIBRARIES "${LIBXML2_ROOT}/lib/libxml2_a.lib")
+endif(UNIX)
