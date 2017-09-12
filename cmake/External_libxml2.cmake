@@ -17,11 +17,14 @@ if(UNIX)
   set(build_cmd "make" "-j2")
   set(install_cmd "make" "install")
 else(UNIX)
-  set(config_cmd "cscript")
+  set(install_dir "${CMAKE_BINARY_DIR}/libxml2-install")
+  STRING(REGEX REPLACE "/" "\\\\" install_dir ${install_dir})
+  message("install_dir is ${install_dir}")
+  set(config_cmd "cd" "win32" "&&" "cscript")
   set(config_args
-      "./win32/configure.js"
+      "configure.js"
       "compiler=msvc"
-      "prefix=${CMAKE_BINARY_DIR}/libxml2-install"
+      "prefix=${install_dir}"
       "iconv=no"
       "zlib=no"
       "static=yes"
@@ -29,8 +32,8 @@ else(UNIX)
       "http=no"
       "cruntime=/MT"
   )
-  set(build_cmd "nmake" "Makefile.msvc")
-  set(install_cmd "nmake" "Makefile.msvc" "install")
+  set(build_cmd "cd" "win32" "&&" "nmake" "Makefile.msvc")
+  set(install_cmd "cd" "win32" "&&" "nmake" "Makefile.msvc" "install")
 endif(UNIX)
 
 # If we have apple, we should export a few C and CXX flags first
@@ -66,7 +69,7 @@ ExternalProject_Add(libxml2
   SOURCE_DIR "${_source}"
   ${libxml2_cmds}
   BUILD_IN_SOURCE 1
-  DEPENDS    ${_deps}
+  DEPENDS ${_deps}
 )
 
 # Set the include dirs, library dirs, and libraries in the parent scope
