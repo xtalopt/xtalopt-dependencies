@@ -10,6 +10,7 @@ endif()
 
 set(boost_with_args
   --with-regex
+  --with-serialization
   --with-system
   --with-thread
 )
@@ -20,7 +21,10 @@ if(WIN32)
   set(_toolset "msvc-14.0")
 
   list(APPEND boost_with_args
-    "--layout=tagged" "toolset=${_toolset}")
+              "--layout=system"
+              "release"
+              "toolset=${_toolset}"
+  )
 
   set(boost_cmds
     CONFIGURE_COMMAND bootstrap.bat
@@ -60,3 +64,24 @@ set(BOOST_ROOT "${install_dir}" CACHE INTERNAL "")
 
 set(Boost_INCLUDE_DIRS "${BOOST_ROOT}/include")
 set(Boost_LIBRARY_DIRS "${BOOST_ROOT}/lib")
+
+# Unfortunately on Windows, we need to rename the boost libraries so cmake
+# can find them in RDKit.
+if(WIN32)
+  # If we add libraries in the future, we will need to update this
+  set(RENAME_LIBS
+      libboost_chrono.lib
+      libboost_regex.lib
+      libboost_serialization.lib
+      libboost_system.lib
+      libboost_thread.lib
+      libboost_wserialization.lib
+  )
+
+  foreach(rename_lib ${RENAME_LIBS})
+    set(old_name ${Boost_LIBRARY_DIRS}/${rename_lib})
+    string(REPLACE "libboost" "boost" rename_lib ${rename_lib})
+    set(new_name ${Boost_LIBRARY_DIRS}/${rename_lib})
+    add_custom_command(TARGET "boost" POST_BUILD COMMAND ${CMAKE_COMMAND} -E rename ${old_name} ${new_name})
+  endforeach()
+endif(WIN32)
