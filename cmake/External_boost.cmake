@@ -84,6 +84,11 @@ if(WIN32)
     string(REPLACE "libboost" "boost" rename_lib ${rename_lib})
     set(new_name "${Boost_LIBRARY_DIRS}/${rename_lib}")
     string(REPLACE "/" "\\\\" new_name ${new_name})
+
+    if(EXISTS "${new_name}")
+      continue()
+    endif()
+
     add_custom_command(TARGET "boost" POST_BUILD COMMAND mklink "${new_name}" "${old_name}")
 
     # Hopefully I can come up with a more generic fix for this in the near future....
@@ -93,6 +98,11 @@ if(WIN32)
       # for RDKit MUST see it like this
       set(vc_name "${Boost_LIBRARY_DIRS}/lib${rename_lib}-vc140-mt-1_${_v}.lib")
       string(REPLACE "/" "\\\\" vc_name ${vc_name})
+
+      if(EXISTS "${vc_name}")
+        continue()
+      endif()
+
       add_custom_command(TARGET "boost" POST_BUILD COMMAND mklink "${vc_name}" "${old_name}")
     endif(MSVC)
   endforeach()
