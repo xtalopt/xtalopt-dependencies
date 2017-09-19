@@ -79,9 +79,21 @@ if(WIN32)
   )
 
   foreach(rename_lib ${RENAME_LIBS})
-    set(old_name ${Boost_LIBRARY_DIRS}/${rename_lib})
+    set(old_name "${Boost_LIBRARY_DIRS}/${rename_lib}")
+    string(REPLACE "/" "\\\\" old_name ${old_name})
     string(REPLACE "libboost" "boost" rename_lib ${rename_lib})
-    set(new_name ${Boost_LIBRARY_DIRS}/${rename_lib})
-    add_custom_command(TARGET "boost" POST_BUILD COMMAND ${CMAKE_COMMAND} -E rename ${old_name} ${new_name})
+    set(new_name "${Boost_LIBRARY_DIRS}/${rename_lib}")
+    string(REPLACE "/" "\\\\" new_name ${new_name})
+    add_custom_command(TARGET "boost" POST_BUILD COMMAND mklink "${new_name}" "${old_name}")
+
+    # Hopefully I can come up with a more generic fix for this in the near future....
+    if(MSVC)
+      string(REPLACE ".lib" "" rename_lib ${rename_lib})
+      # This is far too specific with vc140, but for some reason, one of the link libraries
+      # for RDKit MUST see it like this
+      set(vc_name "${Boost_LIBRARY_DIRS}/lib${rename_lib}-vc140-mt-1_${_v}.lib")
+      string(REPLACE "/" "\\\\" vc_name ${vc_name})
+      add_custom_command(TARGET "boost" POST_BUILD COMMAND mklink "${vc_name}" "${old_name}")
+    endif(MSVC)
   endforeach()
 endif(WIN32)

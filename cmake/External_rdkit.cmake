@@ -11,6 +11,7 @@ set(_install "${CMAKE_BINARY_DIR}/rdkit-install")
 set(_deps "boost" "eigen3")
 
 set(_cmake_cache_args
+    -DCMAKE_BUILD_TYPE:STRING=Release
     -DCMAKE_INSTALL_PREFIX:PATH=${_install}
     -DRDK_INSTALL_INTREE:BOOL=OFF
     -DRDK_BUILD_PYTHON_WRAPPERS:BOOL=OFF
